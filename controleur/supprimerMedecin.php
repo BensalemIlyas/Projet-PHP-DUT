@@ -15,7 +15,7 @@ $medecin = new Medecin($donneesMedecinObjet);
 $medecinManager = new MedecinsManager();
 if($medecinManager->supprimerMedecin($medecin)){
 	echo "Le medecin a bien été supprimé <br/>";
-	echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>'
+	echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>';
 }else{
 
 	echo "Un problème est survenu, le medecin ne peut être supprimé <br/>";
