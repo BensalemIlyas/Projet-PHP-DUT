@@ -19,5 +19,5 @@ if($medecinManager->supprimerMedecin($medecin)){
 }else{
 
 	echo "Un problème est survenu, le medecin ne peut être supprimé <br/>";
-	echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>'
+	echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>';
 }

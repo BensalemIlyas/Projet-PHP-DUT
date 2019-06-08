@@ -13,7 +13,7 @@ if(isset($_POST) AND ! empty($_POST)){
 		//header('Refresh:2;url=../vue/rechercherMedecin.php');
 		//header('location: ../vue/rechercherMedecin.php');
 		echo "Le medecin a bien été modifié <br/>";
-		echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>'
+		echo '<a href="../vue/rechercherMedecin.php">retour rechercher medecin </a>';
 	}
 }
 ?>
