@@ -6,7 +6,7 @@ require_once('PersonneNonTrouveException.php');
 
 
 class MedecinsManager {
-	private $_pdo; 
+	private $_pdo;
 	public function __construct (){
 		 $connexion = new DbConnexion();
 		 $this->_pdo = $connexion->getPdo();
@@ -26,7 +26,7 @@ class MedecinsManager {
 				$requeteSearch .= "OR ";
 			}
 			/**
-			chaque mot clef est rechercher dans toutes les colonnes de la table 
+			chaque mot clef est rechercher dans toutes les colonnes de la table
 			Usager, pour différencier les différents mots clefs, un compteur a été
 			 mis en place, pour chaque itération(mot clef différent) --> motclef1,
 			  motclef2 etc..**/
@@ -73,19 +73,19 @@ class MedecinsManager {
 			return 'Ce medecin existe déjà';
 		}
 	}
-	/** cette methode prend en entrée un objet de type Usager, qui correspond à un objet Usager modifié (par exemple dans le controleur); 
+	/** cette methode prend en entrée un objet de type Usager, qui correspond à un objet Usager modifié (par exemple dans le controleur);
 	**/
 	public function modifierMedecin(Medecin $medecin,$oldNom,$oldPrenom){
 		if (! $this->checkMedecinExistant($oldNom,$oldPrenom)){
 			throw new PersonneNonTrouveException("Le medecin n'existe pas, il ne peut donc être modifié");
 		}
 		$reqModif = $this->_pdo->prepare("UPDATE medecin
-		Set nom = :nom, prenom = :prenom, civilite = :civilite 
+		Set nom = :nom, prenom = :prenom, civilite = :civilite
 		where nom = :oldNom and prenom = :oldPrenom");
 		$this->bindAllDataMedecin($reqModif,$medecin);
 		$reqModif->bindValue(':oldNom',$oldNom,PDO::PARAM_STR);
 		$reqModif->bindValue(':oldPrenom',$oldPrenom, PDO::PARAM_STR);
-		
+
 		/**
 		execute() renvoie le nombre de lignes modifiées dans la table, si nbLignes >= 1 => la requête a marché
 		**/
@@ -149,17 +149,17 @@ class MedecinsManager {
 
 	public static function getId($nom,$prenom){
 		 $connexion = new DbConnexion();
-		 $pdo = $connexion->getPdo();	
+		 $pdo = $connexion->getPdo();
 		$requeteGetId= $pdo->prepare('select id_medecin from medecin where nom = :nom AND prenom = :prenom');
 		$requeteGetId->bindValue(':nom',$nom,PDO::PARAM_STR);
 		$requeteGetId->bindValue(':prenom',$prenom, PDO::PARAM_STR);
 		$requeteGetId->execute();
 		$id = $requeteGetId->fetch();
 		return $id['id_medecin'];
-		
+
 		//$requeteGetId->execute(array('nom' =>$nom, 'prenom' =>$prenom),'numeroSS' =>$numeroSS));
 
-	} 
+	}
 	//retourne les informations d'un usager sous la forme d'une tableau associatif à partir de son id
 	// en entrée prends l'id de l'usagers, retourne un tableau associatif des informations du medecin
 	public static function getMedecin($id){
@@ -167,7 +167,7 @@ class MedecinsManager {
 		$pdo = $connexion->getPdo();
 		$requeteGetMedecin= $pdo->prepare('select nom, prenom, civilite from medecin where id_medecin = :id');
 		$requeteGetMedecin->execute(array('id' => $id));
-		$donneesMedecin = $requeteGetMedecin->fetch(PDO::FETCH_ASSOC); 
+		$donneesMedecin = $requeteGetMedecin->fetch(PDO::FETCH_ASSOC);
 		return $donneesMedecin;
 	}
 
@@ -178,7 +178,7 @@ class MedecinsManager {
 		$requeteAllMedecins= $pdo->query('select * from medecin order by nom, prenom asc ');
 
 		return $requeteAllMedecins;
-			
+
 
 	}
 

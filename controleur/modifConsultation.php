@@ -1,6 +1,5 @@
 <?php
 require_once '../modele/ConsultationsManager.php';
-var_dump($_POST);
 if(UsagersManager::checkUsagerExistant($_POST['nomPatient'],$_POST['prenomPatient'],$_POST['numeroSS'])){
     $id_medecin = $_POST['medecinConsultation'];
 //Pour demain : modifier le POST ['id_patient'] pour nom, prenom et numeroSS

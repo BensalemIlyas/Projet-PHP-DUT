@@ -5,7 +5,7 @@ require_once('../controleur/Usager.php');
 require_once('PersonneNonTrouveException.php');
 
 class UsagersManager {
-	private $_pdo; 
+	private $_pdo;
 	public function __construct (){
 		 $connexion = new DbConnexion();
 		 $this->_pdo = $connexion->getPdo();
@@ -34,11 +34,11 @@ class UsagersManager {
 				$requeteSearch .= "OR ";
 			}
 			/**
-			chaque mot clef est rechercher dans toutes les colonnes de la table 
+			chaque mot clef est rechercher dans toutes les colonnes de la table
 			Usager, pour différencier les différents mots clefs, un compteur a été
 			 mis en place, pour chaque itération(mot clef différent) --> motclef1,
 			  motclef2 etc..**/
-				$requeteSearch .= "nom like :mot".$compteur." OR prenom like :mot".$compteur." OR civilite like :mot".$compteur." OR adresse  like :mot".$compteur." OR cp  like :mot".$compteur." OR ville like :mot".$compteur."  OR dateNaissance like :mot".$compteur." OR 
+				$requeteSearch .= "nom like :mot".$compteur." OR prenom like :mot".$compteur." OR civilite like :mot".$compteur." OR adresse  like :mot".$compteur." OR cp  like :mot".$compteur." OR ville like :mot".$compteur."  OR dateNaissance like :mot".$compteur." OR
 				lieuNaissance like :mot".$compteur." OR numeroSS like :mot".$compteur." ";
 
 			$compteur++;
@@ -77,7 +77,7 @@ class UsagersManager {
 			echo "L'usager existe déjà";
 		}
 	}
-	/** cette methode prend en entrée un objet de type Usager, qui correspond à un objet Usager modifié (par exemple dans le controleur); 
+	/** cette methode prend en entrée un objet de type Usager, qui correspond à un objet Usager modifié (par exemple dans le controleur);
 	**/
 	public function modifierUsager(Usager $usager,$oldNom,$oldPrenom,$oldNumeroSS){
 		if (! $this->checkUsagerExistant($oldNom,$oldPrenom,$oldNumeroSS )){
@@ -90,7 +90,7 @@ class UsagersManager {
 		$reqModif->bindValue(':oldNom',$oldNom,PDO::PARAM_STR);
 		$reqModif->bindValue(':oldPrenom',$oldPrenom, PDO::PARAM_STR);
 		$reqModif->bindValue(':oldNumeroSS',$oldNumeroSS, PDO::PARAM_STR);
-		
+
 		/**
 		execute() renvoie le nombre de lignes modifiées dans la table, si nbLignes >= 1 => la requête a marché
 		**/
@@ -127,7 +127,7 @@ class UsagersManager {
 	public static function checkUsagerExistant($nomUsager,$prenomUsager,$numeroSSUsager){
         $connexion = new DbConnexion();
         $pdo = $connexion->getPdo();
-		$requeteVerif = $pdo->prepare("select count(*) from usager where nom =:nom and prenom = :prenom and 
+		$requeteVerif = $pdo->prepare("select count(*) from usager where nom =:nom and prenom = :prenom and
                 numeroSS = :numeroSS");
 		$requeteVerif->execute(array('nom' => $nomUsager, 'prenom' => $prenomUsager, 'numeroSS' =>$numeroSSUsager));
 		if($requeteVerif->fetchColumn() >= 1){
@@ -153,8 +153,8 @@ class UsagersManager {
 	}
 	public static function getId($nom,$prenom,$numeroSS){
 		 $connexion = new DbConnexion();
-		 $pdo = $connexion->getPdo();	
-		$requeteGetId= $pdo->prepare('select id_patient from usager where nom = :nom AND prenom = :prenom AND 
+		 $pdo = $connexion->getPdo();
+		$requeteGetId= $pdo->prepare('select id_patient from usager where nom = :nom AND prenom = :prenom AND
 			numeroSS = :numeroSS');
 		$requeteGetId->bindValue(':nom',$nom,PDO::PARAM_STR);
 		$requeteGetId->bindValue(':prenom',$prenom, PDO::PARAM_STR);
@@ -162,10 +162,10 @@ class UsagersManager {
 		$requeteGetId->execute();
 		$id = $requeteGetId->fetch();
 		return $id['id_patient'];
-		
+
 		//$requeteGetId->execute(array('nom' =>$nom, 'prenom' =>$prenom),'numeroSS' =>$numeroSS));
 
-	} 
+	}
 	//retourne les informations d'un usager sous la forme d'une tableau associatif à partir de son id
 	// en entrée prends l'id de l'usagers, retourne un tableau associatif des informations de l'usager
 	public static function getUsager($id){
@@ -173,7 +173,7 @@ class UsagersManager {
 		$pdo = $connexion->getPdo();
 		$requeteGetUsager= $pdo->prepare('select nom, prenom, civilite, adresse, cp, ville, numeroSS, lieuNaissance, dateNaissance from usager where id_patient = :id');
 		$requeteGetUsager->execute(array('id' => $id));
-		$donneesUsager = $requeteGetUsager->fetch(PDO::FETCH_ASSOC); 
+		$donneesUsager = $requeteGetUsager->fetch(PDO::FETCH_ASSOC);
 		return $donneesUsager;
 	}
 	//fonction qui permet d'ajouter un à un patient un medecin referent
@@ -183,7 +183,7 @@ class UsagersManager {
 		// verifie si le patient ne possède déja pas un medecin referent
 		if( ! self::checkReferentExistant($id_patient) == TRUE){
 			//si c'est le cas ajoute le couple (patient,medecin)
-			$reqSetReference = $pdo->prepare("insert into REFERENT (id_patient,id_medecin) values(:id_patient,:id_medecin)");
+			$reqSetReference = $pdo->prepare("insert into referent (id_patient,id_medecin) values(:id_patient,:id_medecin)");
 			$reqSetReference->execute(array('id_patient'=>$id_patient, 'id_medecin' => $id_medecin));
 			if($reqSetReference){
 				return "Le medecin référent a été ajouté au patient </br>";
@@ -195,7 +195,7 @@ class UsagersManager {
 	public static function checkReferentExistant($id_patient){
 		$connexion = new DbConnexion();
 		$pdo = $connexion->getPdo();
-		$checkReferentExistant = $pdo->prepare("select count(*) as nbLignes from REFERENT where id_patient = :id_patient");
+		$checkReferentExistant = $pdo->prepare("select count(*) as nbLignes from referent where id_patient = :id_patient");
 		$checkReferentExistant->execute(array('id_patient'=>$id_patient));
 		$resultCheck = $checkReferentExistant->fetch(PDO::FETCH_ASSOC);
 		if($resultCheck['nbLignes'] > 0){
@@ -209,14 +209,14 @@ class UsagersManager {
 		$connexion = new DbConnexion();
 		$pdo = $connexion->getPdo();
 		if(self::checkReferentExistant($id_patient)){
-			$getReferent = $pdo->prepare("select id_medecin from REFERENT 
+			$getReferent = $pdo->prepare("select id_medecin from referent
             where id_patient = :id_patient");
 			$getReferent->execute(array('id_patient'=>$id_patient));
 			$referent= $getReferent->fetch(PDO::FETCH_ASSOC);
 			return $referent['id_medecin'];
 
 		}
-	
+
 	}
 
 

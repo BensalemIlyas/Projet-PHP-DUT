@@ -7,7 +7,7 @@ class ConsultationsManager{
 	public static function getReferent($id_patient){
 		$connexion = new DbConnexion();
 		$pdo = $connexion->getPdo();
-		$reqGetReferent= $pdo->prepare("select id_medecin, count(*) AS nbLignes from REFERENT where id_patient = :id_patient ");
+		$reqGetReferent= $pdo->prepare("select id_medecin, count(*) AS nbLignes from referent where id_patient = :id_patient ");
 		$reqGetReferent->bindValue(':id_patient',$id_patient);
 		$reqGetReferent->execute();
 		$donneesReferent=$reqGetReferent->fetch();
@@ -23,7 +23,7 @@ class ConsultationsManager{
 	    if (self::verifChevauchementConsultationParMedecin($dateConsultation,$heureConsultation,$dureeConsultation,$id_medecin) == FALSE){
             $connexion = new DbConnexion();
             $pdo = $connexion->getPdo();
-            $requeteAjoutConsultation = $pdo->prepare('insert into CONSULTATION (id_patient,id_medecin,dateConsultation,
+            $requeteAjoutConsultation = $pdo->prepare('insert into consultation (id_patient,id_medecin,dateConsultation,
             heureConsultation,dureeConsultation) values (:id_patient,:id_medecin,:dateConsultation,:heureConsultation,:dureeConsultation)');
             /*test : insert into consultation (id_patient,id_medecin,dateConsultation,heureConsultation,dureeConsultation)
             values (2,2,'1990-03-02','12:20',30);*/
@@ -46,6 +46,7 @@ class ConsultationsManager{
         ConsultationsManager::supprimerConsultation($oldId_patient,$oldId_medecin,$oldDateConsultation,$oldHeureConsultation);
         if ( self::verifChevauchementConsultationModificationParMedecin($dateConsultation,$heureConsultation,$dureeConsultation,$id_medecin)== FALSE){
             $medecin  = MedecinsManager::getMedecin($oldId_medecin);
+						self::ajoutConsultation($oldId_patient,$oldId_medecin,$oldDateConsultation,$oldHeureConsultation,$oldDureeConsultation);
             $patient = UsagersManager::getUsager($oldId_patient);
             if (MedecinsManager::checkMedecinExistant($medecin['nom'],$medecin['prenom'] ) == true AND
                 UsagersManager::checkUsagerExistant($patient['nom'],$patient['prenom'], $patient['numeroSS'] ) == true){
@@ -81,7 +82,7 @@ class ConsultationsManager{
     public static function supprimerConsultation($id_patient,$id_medecin,$dateConsultation,$heureConsultation){
         $connexion = new DbConnexion();
         $pdo = $connexion->getPdo();
-	    $reqSupprimerConsultation = $pdo->prepare('delete from CONSULTATION where id_patient = :id_patient AND id_medecin =
+	    $reqSupprimerConsultation = $pdo->prepare('delete from consultation where id_patient = :id_patient AND id_medecin =
             :id_medecin AND dateConsultation = :dateConsultation AND heureConsultation = :heureConsultation');
 	    $reqSupprimerConsultation->execute(array('id_patient' =>$id_patient, 'id_medecin'=> $id_medecin, 'dateConsultation'
 	    => $dateConsultation,'heureConsultation' => $heureConsultation ));
@@ -172,7 +173,7 @@ class ConsultationsManager{
         $pdo = $connexion->getPdo();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $maxHeureConsultationInferieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION
+        $maxHeureConsultationInferieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from consultation
    where heureConsultation = (select max(heureConsultation) from consultation where heureConsultation <= :heureConsultation AND id_medecin = :id_medecin and dateConsultation = :dateConsultation )");
 
         $maxHeureConsultationInferieurANewHeureConsultation->execute(array('dateConsultation' =>$dateConsultation, 'heureConsultation' =>$heureConsultation,
@@ -188,8 +189,8 @@ class ConsultationsManager{
                 return true;
             }
         }
-        $minHeureConsultationSuperieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION
-   where heureConsultation = (select min(heureConsultation) from CONSULTATION where heureConsultation >= :heureConsultation AND id_medecin = :id_medecin and dateConsultation = :dateConsultation )");
+        $minHeureConsultationSuperieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from consultation
+   where heureConsultation = (select min(heureConsultation) from consultation where heureConsultation >= :heureConsultation AND id_medecin = :id_medecin and dateConsultation = :dateConsultation )");
 
         $minHeureConsultationSuperieurANewHeureConsultation->execute(array('dateConsultation' =>$dateConsultation, 'heureConsultation' =>$heureConsultation,
             'id_medecin'=>$id_medecin));
