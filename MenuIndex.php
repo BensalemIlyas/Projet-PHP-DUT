@@ -42,6 +42,8 @@ echo $formAuthentif->getForm();
             </ul>
             </li>
 
+            <li><a href="vue/afficherStatistiques.php">Statistiques</a></li>
+
 
         </ul>
 

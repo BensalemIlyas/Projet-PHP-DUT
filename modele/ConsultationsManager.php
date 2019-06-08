@@ -3,7 +3,7 @@
 	require_once ('MedecinsManager.php');
 	require_once ('UsagersManager.php');
 class ConsultationsManager{
-	
+
 	public static function getReferent($id_patient){
 		$connexion = new DbConnexion();
 		$pdo = $connexion->getPdo();
@@ -57,7 +57,7 @@ class ConsultationsManager{
                 $pdo = $connexion->getPdo();
                 $reqModif = $pdo->prepare("UPDATE consultation
 		    Set id_patient = :id_patient, id_medecin = :id_medecin, dateConsultation = :dateConsultation,
-		    heureConsultation = :heureConsultation, dureeConsultation = :dureeConsultation  
+		    heureConsultation = :heureConsultation, dureeConsultation = :dureeConsultation
 		    where id_patient = :oldId_patient and id_medecin = :oldId_medecin and dateConsultation = :oldDateConsultation
 		    and heureConsultation = :oldHeureConsultation");
                 $nbLignesSql = $reqModif->execute(array('id_patient' => $id_patient, 'id_medecin' => $id_medecin, 'dateConsultation' =>
@@ -105,7 +105,7 @@ class ConsultationsManager{
         $connexion = new DbConnexion();
         $pdo = $connexion->getPdo();
         //requête synchronisée affiche toutes les consultaitons.
-        $requeteGetConsultation = 'select id_patient, id_medecin, dateConsultation, heureConsultation,dureeConsultation 
+        $requeteGetConsultation = 'select id_patient, id_medecin, dateConsultation, heureConsultation,dureeConsultation
         from consultation where EXISTS(select usager.nom from usager where consultation.id_patient = usager.id_patient
             UNION
         select medecin.nom from medecin where consultation.id_medecin = medecin.id_medecin)order by dateConsultation DESC,
@@ -129,7 +129,7 @@ class ConsultationsManager{
             id_patient in (select id_patient from Usager where civilite = :civilite AND
               datediff(CURRENT_DATE,Usager.dateNaissance)/365.25';*/
         $requetegeStatistiqueUsager = 'select count(*) as stat from usager where
-            id_patient in (select distinct id_patient from consultation) AND civilite = :civilite AND 
+            id_patient in (select distinct id_patient from consultation) AND civilite = :civilite AND
               datediff(CURRENT_DATE,usager.dateNaissance)/365.25';
         switch ($age) {
             case 'moinsDe25' :
@@ -144,13 +144,14 @@ class ConsultationsManager{
         }
         $requeteStatistiquesConsultationUsager = $pdo->prepare($requetegeStatistiqueUsager);
         $requeteStatistiquesConsultationUsager->execute(array('civilite' => $civilite));
-        return $requeteStatistiquesConsultationUsager->fetch()['stat'];
+				$stat = $requeteStatistiquesConsultationUsager->fetch()['stat'];
+			  return $stat;
     }
 
     public static function nbHeuresHeuresConsultationByMedecin(){
         $connexion = new DbConnexion();
         $pdo = $connexion->getPdo();
-        $requetenbHeuresByMedecin = $pdo->query('select id_medecin as medecin, SUM(round(dureeConsultation/60,2)) 
+        $requetenbHeuresByMedecin = $pdo->query('select id_medecin as medecin, SUM(round(dureeConsultation/60,2))
             as nbHeures from consultation group by id_medecin');
         return $requetenbHeuresByMedecin;
     }
@@ -159,8 +160,8 @@ class ConsultationsManager{
         $pdo = $connexion->getPdo();
         $requeteVerifChevauchement = $pdo->prepare("select count(*) as nbChevauchements  from consultation c1
 	where EXISTS ( select * from consultation as  c2
-                  where c1.dateConsultation = c2.dateConsultation and c1.heureConsultation = c2.heureConsultation 
-                 and ABS ( TIMESTAMPDIFF( SECOND ,concat(c2.dateConsultation,' ',c2.heureConsultation) , concat(:dateConsultation,' ',:heureConsultation) ) ) / 60 < :dureeConsultation 
+                  where c1.dateConsultation = c2.dateConsultation and c1.heureConsultation = c2.heureConsultation
+                 and ABS ( TIMESTAMPDIFF( SECOND ,concat(c2.dateConsultation,' ',c2.heureConsultation) , concat(:dateConsultation,' ',:heureConsultation) ) ) / 60 < :dureeConsultation
         ) AND id_medecin = :id_medecin");
        $requeteVerifChevauchement->execute(array('dateConsultation' =>$dateConsultation, 'heureConsultation' =>$heureConsultation,'dureeConsultation' =>$dureeConsultation,
             'id_medecin'=>$id_medecin));
@@ -171,7 +172,7 @@ class ConsultationsManager{
         $pdo = $connexion->getPdo();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $maxHeureConsultationInferieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION 
+        $maxHeureConsultationInferieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION
    where heureConsultation = (select max(heureConsultation) from consultation where heureConsultation <= :heureConsultation AND id_medecin = :id_medecin and dateConsultation = :dateConsultation )");
 
         $maxHeureConsultationInferieurANewHeureConsultation->execute(array('dateConsultation' =>$dateConsultation, 'heureConsultation' =>$heureConsultation,
@@ -187,7 +188,7 @@ class ConsultationsManager{
                 return true;
             }
         }
-        $minHeureConsultationSuperieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION 
+        $minHeureConsultationSuperieurANewHeureConsultation = $pdo->prepare("select heureConsultation, dureeConsultation from CONSULTATION
    where heureConsultation = (select min(heureConsultation) from CONSULTATION where heureConsultation >= :heureConsultation AND id_medecin = :id_medecin and dateConsultation = :dateConsultation )");
 
         $minHeureConsultationSuperieurANewHeureConsultation->execute(array('dateConsultation' =>$dateConsultation, 'heureConsultation' =>$heureConsultation,
