@@ -10,11 +10,11 @@ if(isset($_POST) AND ! empty($_POST)){
 		$donneesMedecin[$indiceTextuels] = $_POST[$indiceTextuels];
 		$i++;
 	}
-	$medecinModif = new Medecin($donneesMedecin); 
+	$medecinModif = new Medecin($donneesMedecin);
 	$medecinManager =  new MedecinsManager();
 	if($medecinManager->modifierMedecin($medecinModif,$_POST['oldNom'],$_POST['oldPrenom'])){
 		header('Refresh:2;url=../vue/rechercherMedecin.php');
-		echo "Le medecin a bien été modifié";
+		//echo "Le medecin a bien été modifié";
 	}
 }
 ?>
