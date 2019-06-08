@@ -64,10 +64,6 @@ class MedecinsManager {
 			}else {
 				return "Un problème est survenu...Le medecin ne peut être ajouté";
 			}
-			if ($reqAjout === FALSE) {
-				var_dump($this->_pdo->errorInfo());
-				exit();
-			}
 
 		}else{
 			return 'Ce medecin existe déjà';
