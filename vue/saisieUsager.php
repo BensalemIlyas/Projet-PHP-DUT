@@ -1,9 +1,9 @@
 <?php
 require_once 'authenfication.php';
 require_once 'Menu.php';
-require 'Formulaire.php';
-require'Select.php';
-require '../modele/MedecinsManager.php';
+require_once 'Formulaire.php';
+require_once 'Select.php';
+require_once '../modele/MedecinsManager.php';
 //rentrer (action,method)
 $formConsultation = new Formulaire('../controleur/ajoutUsager.php','POST');
 $formConsultation->setLegend("Formulaire d'ajout d'un patient");

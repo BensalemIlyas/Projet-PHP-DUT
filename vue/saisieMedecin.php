@@ -1,8 +1,8 @@
 <?php
 require_once 'authenfication.php';
 require_once 'Menu.php';
-require 'Formulaire.php';
-require '../controleur/Medecin.php';
+require_once 'Formulaire.php';
+require_once '../controleur/Medecin.php';
 //rentrer (action,method)
 $formMedecin = new Formulaire('../controleur/ajoutMedecin.php','POST');
 $formMedecin->setLegend("Formulaire d'ajout d'un medecin");
