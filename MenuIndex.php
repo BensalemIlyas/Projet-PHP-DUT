@@ -29,7 +29,7 @@ echo $formAuthentif->getForm();
             </li>
             <li>Médecins
                 <ul class="submenu">
-                    <li><a href="vue/rechercherMedecin.php">Rechercher un Medecin</a></li>
+                    <li><a href="vue/rechercherMedecin.php">Rechercher un Medecin alut mon gas</a></li>
 
                     <li><a href="vue/saisieMedecin.php">Ajouter un nouveau Medecin</a></li>
 
@@ -49,5 +49,3 @@ echo $formAuthentif->getForm();
 
     </nav>
 </header>
-
-
