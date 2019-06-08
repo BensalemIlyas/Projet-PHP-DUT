@@ -1,4 +1,18 @@
 <?php
+require_once 'FormulaireAuthentification.php';
+if (!empty($_POST)) {
+    $_SESSION['login'] = $_POST['login'];
+    $_SESSION['psw'] = $_POST['psw'];
+    $_SESSION['consultation']='consultation';
+}
+$formAuthentif = new FormulaireAuthentification('index.php', 'POST');
+$formAuthentif->setLegend('Accès réservé aux personnes autorisées');
+$formAuthentif->setText('login', 'Login');
+$formAuthentif->setPassword('psw', 'Mot de passe');
+$formAuthentif->setSubmit('Connexion');
+echo $formAuthentif->getForm();
+
+
 ?>
 <body>
 <link rel="stylesheet" href="../../Presentation.css" />
@@ -35,4 +49,3 @@
 </header>
 <?php
 ?>
-

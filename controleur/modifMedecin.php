@@ -10,7 +10,7 @@ if(isset($_POST) AND ! empty($_POST)){
 	$medecinModif = new Medecin($donneesMedecin);
 	$medecinManager =  new MedecinsManager();
 	if($medecinManager->modifierMedecin($medecinModif,$_POST['oldNom'],$_POST['oldPrenom'])){
-		//header('Refresh:2;url=../vue/rechercherMedecin.php');
+		header('Refresh:2;url=../vue/rechercherMedecin.php');
 		//header('location: ../vue/rechercherMedecin.php');
 		echo "Le medecin a bien été modifié";
 	}
