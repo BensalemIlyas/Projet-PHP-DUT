@@ -1,6 +1,6 @@
 <?php
 require_once 'authenfication.php';
-require_once 'MenuIndexModification.php';
+require_once 'Menu.php';
 require_once 'Formulaire.php';
 require_once '../modele/UsagersManager.php';
 //$_SERVER['HTTP_REFERER'] ='http://localhost/projetCabinetMedical/vue/lienConsultation.php';
