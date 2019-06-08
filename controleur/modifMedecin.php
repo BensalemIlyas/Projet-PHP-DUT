@@ -1,6 +1,3 @@
-
-
-
 <?php
 require_once 'Medecin.php';
 require_once '../modele/MedecinsManager.php';
@@ -14,8 +11,8 @@ if(isset($_POST) AND ! empty($_POST)){
 	$medecinManager =  new MedecinsManager();
 	if($medecinManager->modifierMedecin($medecinModif,$_POST['oldNom'],$_POST['oldPrenom'])){
 		//header('Refresh:2;url=../vue/rechercherMedecin.php');
-		header('location: ../vue/rechercherMedecin.php');
-		//echo "Le medecin a bien été modifié";
+		//header('location: ../vue/rechercherMedecin.php');
+		echo "Le medecin a bien été modifié";
 	}
 }
 ?>
