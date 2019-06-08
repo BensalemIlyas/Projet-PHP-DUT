@@ -1,6 +1,6 @@
 <?php
 require_once 'authenfication.php';
-require_once 'Menu.php';
+require_once 'MenuIndexModification.php';
 require_once 'Formulaire.php';
 require_once '../modele/UsagersManager.php';
 //$_SERVER['HTTP_REFERER'] ='http://localhost/projetCabinetMedical/vue/lienConsultation.php';
@@ -17,7 +17,7 @@ echo ($formRecherche->getForm());
 if(isset($_POST['recherche']) && ! empty($_POST['recherche'])){
 	$usagersManager = new UsagersManager();
 	$reqRecherche = $usagersManager->afficherUsagers($_POST['recherche']);
-	//affiche le tableau html qui contient 
+	//affiche le tableau html qui contient
 	echo(Usager::afficherTableauUsagers($reqRecherche, $_POST['wish']));
 	echo '<a href="saisieUsager.php">Ajouter un nouveau patient</a>';
 }else{

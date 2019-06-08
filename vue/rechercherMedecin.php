@@ -1,6 +1,6 @@
 <?php
 require_once 'authenfication.php';
-require_once 'Menu.php';
+require_once 'MenuIndexModification.php';
 require_once 'Formulaire.php';
 require_once '../modele/MedecinsManager.php';
 
@@ -24,7 +24,7 @@ if(isset($_POST['recherche']) && ! empty($_POST['recherche'])){
 	$demande = explode(",",$_POST['demande']);
 	$medecinsManager = new MedecinsManager();
 	$reqRecherche = $medecinsManager->afficherMedecins($_POST['recherche']);
-	//affiche le tableau html qui contient 
+	//affiche le tableau html qui contient
 	echo(Medecin::afficherTableauMedecins($reqRecherche, $demande));
 	echo '<a href="saisieMedecin.php">Ajouter un nouveau medecin</a>';
 }else {
