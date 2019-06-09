@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once '../vue/Table.php';
 require_once 'TableauNonAssociatifException.php';
 require_once '../modele/UsagersManager.php';
@@ -29,10 +29,10 @@ class Usager {
 	}
 	public static function getIndicesTextuels (){
 		return array('nom','prenom','civilite','adresse','cp','ville','numeroSS','lieuNaissance','dateNaissance');
-	} 
+	}
 	public static function getIndicesUnqUsager (){
 		return array('nom','prenom','numeroSS');
-	} 
+	}
 	public function hydrate(array $donnees){
 		foreach($donnees as $colonne => $valeur){
 			$method = 'set'.ucfirst($colonne);
@@ -40,9 +40,9 @@ class Usager {
 			if(method_exists($this,$method)){
 				$this->$method($valeur);
 				$this->_donneesUsager[$colonne] =$this->$getMethod();
-				
+
 			}
-			
+
 		}
 
 	}
@@ -68,7 +68,7 @@ class Usager {
             }
             $id_patient = UsagersManager::getId($ligneUsagers['nom'],$ligneUsagers['prenom'], $ligneUsagers['numeroSS']);
             $id_medecin = UsagersManager::getReferent($id_patient);
-            $medecin = UsagersManager::getReferent($id_medecin);
+            $medecin = MedecinsManager::getMedecin($id_medecin);
             $tabReq->celluleContenu($medecin['nom'].' '.$medecin['prenom']);
             switch ($demande){
 
@@ -128,7 +128,7 @@ class Usager {
                         $tabReq->celluleContenu('<a href="saisieConsultation.php/?id_patient='.$id_patient.'&amp;wish=consultation" >selectionner ce patient</a>');
                 }
 				$tabReq->trEnd();
-			    
+
 			}
 			return $tabReq->getTableau();
 
@@ -207,7 +207,7 @@ class Usager {
 	}
 		public function setDateNaissance($dateNaissance){
 		if(is_string($dateNaissance)){
-			//MySQL n'accepte pas les chaines de caractères vides(champ date formulaire non renseigné), il faut rentrer null manuellement. 
+			//MySQL n'accepte pas les chaines de caractères vides(champ date formulaire non renseigné), il faut rentrer null manuellement.
 			if($dateNaissance == ''){
 				$dateNaissance = NULL;
 			}
@@ -222,5 +222,5 @@ class Usager {
 	    }
 
 }
-	
+
  ?>
